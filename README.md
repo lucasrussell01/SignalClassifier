@@ -4,7 +4,7 @@ Multiclass classification of Higgs (Signal), Genuine Taus and Fake Taus.
 
 ## Sample lists
 
-Samples specified in `config` directory.
+Samples specified in `Samples` directory.
 
 ## Production
 
