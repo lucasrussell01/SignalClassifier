@@ -1,0 +1,2 @@
+data_C /Tau/Run2022C-22Sep2023-v1/NANOAOD
+data_D /Tau/Run2022D-22Sep2023-v1/NANOAOD
