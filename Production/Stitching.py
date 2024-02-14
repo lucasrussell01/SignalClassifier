@@ -20,11 +20,11 @@ samples = {
 xsec = [5455.0, 978.3, 315.1, 93.7, 45.4]
 
 stitch_info = {
-    "inc": {'nEff': 0, 'xsec': None},
-    "1j": {'nEff': 0, 'xsec': xsec[1]},
-    "2j": {'nEff': 0, 'xsec': xsec[2]}, 
-    "3j": {'nEff': 0, 'xsec': xsec[3]},
-    "4j": {'nEff': 0, 'xsec': xsec[4]},
+    "inc": {'nEff': 0, 'fXS': None},
+    "1j": {'nEff': 0, 'fXS': xsec[1]/xsec[0]},
+    "2j": {'nEff': 0, 'fXS': xsec[2]/xsec[0]}, 
+    "3j": {'nEff': 0, 'fXS': xsec[3]/xsec[0]},
+    "4j": {'nEff': 0, 'fXS': xsec[4]/xsec[0]},
         }
 
      
@@ -37,16 +37,15 @@ for key, info in samples.items():
 # Store stitching information in dictionary
 for key, info in stitch_info.items(): 
     if key != "inc":
-        # calculate relative cross sec
-        info['rel_xsec'] = info['xsec']/xsec[0]
-        # calculate weight for exclusive sample
-        w_num = info['rel_xsec'] * stitch_info["inc"]["nEff"]
-        w_den = info['rel_xsec'] * stitch_info["inc"]["nEff"] + info['nEff']
+        # calculate weight for different N jets samples
+        w_num = info['fXS'] * stitch_info["inc"]["nEff"]
+        w_den = info['fXS'] * stitch_info["inc"]["nEff"] + info['nEff']
         info['stitchWeight'] = w_num/w_den
     else:
         info['rel_xsec'] = None
         info['stitchWeight'] = 1
-        
+
+w = [info['stitchWeight'] for key, info in stitch_info.items()]
 
 # Add a stitching weights column to the files, and change overall weight.    
 for key, info in samples.items():
@@ -61,7 +60,7 @@ for key, info in samples.items():
         # Read the file into a dataframe
         df = pd.read_parquet(f, engine='pyarrow')
         
-        df["stitchWeight"] = stitch_info[info['nJets']]['stitchWeight']
+        df["stitchWeight"] = df["nLHEjets"].apply(lambda n: w[n]) # Apply the weight for correct njet...
         df["weight"] *= df["stitchWeight"]
         
         save_path = out_path + f"/{key}_STITCHED_{i}.parquet"
