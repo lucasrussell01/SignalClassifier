@@ -34,10 +34,10 @@ for key, sel in samples.items():
     n_eff_tot = 0 # total number of effective events
     
     # Find files for given dataset
-    data_files = glob(f"{base_dir}/{key}/nominal/*.parquet")[:sel['max_files']] # data
+    files = glob(f"{base_dir}/{key}/nominal/*.parquet")[:sel['max_files']] # data
     run_info = json.load(open(f"{base_dir}/{key}/nominal/run_info.json", "r"))
 
-    print(f"Processing {len(data_files)} files for Dataset:\033[1m{key}\033[0m")
+    print(f"Processing {len(files)} files for Dataset:\033[1m{key}\033[0m")
     
     if sel['os']:
         print("Selecting \033[1mopposite\033[0m sign pairs")
@@ -52,7 +52,7 @@ for key, sel in samples.items():
         os.makedirs(out_path)
     n_shards = 0 # Track how many files have been saved
     
-    for f in tqdm(data_files):
+    for f in tqdm(files):
         
         # Read the file into a dataframe
         df = pd.read_parquet(f, engine='pyarrow')

@@ -6,7 +6,7 @@ import json
 from tqdm import tqdm
 
 base_dir = '/vols/cms/lcr119/tuples/TauCP/Concat1302'
-out_dir = base_dir + "_STITCHED"
+out_dir = '/vols/cms/lcr119/tuples/TauCP/Stitched1502'
 
 samples = {
     'DYto2L_M-50_madgraphMLM': {'nJets': 'inc'}, 
@@ -52,9 +52,11 @@ for key, info in samples.items():
     files = glob(f"{base_dir}/{key}/*.parquet")
     print(f"Processing {key}")
     
-    out_path = f"{out_dir}/{key}/"
+    out_path = f"{out_dir}/{key}"
     if not os.path.exists(out_path):
         os.makedirs(out_path)
+    # Copy across the summary json file for downstream reweighting:
+    os.system(f"cp {base_dir}/{key}/Summary.json {out_path}/Summary.json")
         
     for i, f in enumerate(tqdm(files)):
         # Read the file into a dataframe
