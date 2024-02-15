@@ -61,7 +61,6 @@ for key, info in samples.items():
     for i, f in enumerate(tqdm(files)):
         # Read the file into a dataframe
         df = pd.read_parquet(f, engine='pyarrow')
-        
         df["stitchWeight"] = df["nLHEjets"].apply(lambda n: w[n]) # Apply the weight for correct njet...
         df["weight"] *= df["stitchWeight"]
         

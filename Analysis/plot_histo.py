@@ -21,7 +21,7 @@ bin_centre = bins[:-1]+ np.diff(bins)/2
 
 step_edges = np.append(bins,2*bins[-1]-bins[-2])
 
-file_path = "test_out"
+file_path = "column.json"
 
 # Read the JSON file
 with open(file_path, 'r') as file:
@@ -29,10 +29,9 @@ with open(file_path, 'r') as file:
 
 
 
+taus = np.histogram(data["DY"]["m_vis"], bins = bins, weights = data["DY"]["weight"])[0]
+qcd = np.histogram(data["QCD"]["m_vis"], bins=bins, weights = data["QCD"]["weight"])[0]
 
-
-taus = np.histogram(data["DYJetsToLL_M-50_forPOG"]["mvis"], bins = bins, weights = data["DYJetsToLL_M-50_forPOG"]["weight"])[0]
-qcd = np.histogram(data["QCD_samesign"]["mvis"], bins=bins, weights = data["QCD_samesign"]["weight"])[0]
 
 
 fig, ax = plt.subplots(figsize = (6,6))
@@ -46,8 +45,8 @@ qcd_step = np.append(np.insert(qcd,0,0.0),0.0) + taus_step
 ax.step(step_edges, taus_step, color='black', linewidth = 0.5)
 ax.step(step_edges, qcd_step, color='black', linewidth = 0.5)
 
-ax.hist(data["GluGluHToTauTau_M125"]["mvis"], histtype="step", bins=bins, color = red, linewidth = 2, label = r"ggH$\to\tau\tau$", weights=data["GluGluHToTauTau_M125"]["weight"])
-ax.hist(data["VBFHTauTau_M125"]["mvis"], histtype="step", bins=bins, color = blue, linewidth = 2, label = r"qqH$\to\tau\tau$", weights=data["VBFHTauTau_M125"]["weight"])
+ax.hist(data["ggH"]["m_vis"], histtype="step", bins=bins, color = red, linewidth = 2, label = r"ggH$\to\tau\tau$", weights=data["ggH"]["weight"])
+ax.hist(data["VBF"]["m_vis"], histtype="step", bins=bins, color = blue, linewidth = 2, label = r"qqH$\to\tau\tau$", weights=data["VBF"]["weight"])
 
 ax.set_xlabel(r"m$_{vis}$ (GeV)")
 ax.set_ylabel(f"Weighted Events/{bin_size} GeV")
@@ -57,4 +56,4 @@ ax.text(0.01, 1.02, 'CMS', fontsize=20, transform=ax.transAxes, fontweight='bold
 ax.text(0.16, 1.02, 'Simulation', fontsize=16, transform=ax.transAxes, fontstyle='italic',fontfamily='sans-serif')
 
 ax.legend()
-plt.savefig(f"m_vis.png")
+plt.savefig(f"m_vis.pdf")

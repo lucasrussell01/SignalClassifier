@@ -28,7 +28,7 @@ samples = {
     'data_C': {'type': 0, 'sum_weights': 0 }
           }
 
-out_dir = '/vols/cms/lcr119/tuples/TauCP/NN_weighted/'
+out_dir = '/vols/cms/lcr119/tuples/TauCP/NN_weighted'
 
 
 higgs_eff_num = np.zeros(2) # ggH and VBF effective numbers
@@ -91,7 +91,7 @@ for key, info in samples.items():
             df['higgs_weight'] = higgs_weights[info['higgs_type']]
             df['weight'] *= df['category_weight']*df['higgs_weight']
         else: 
-            df['weight'] += df['category_weight']
+            df['weight'] *= df['category_weight']
 
         # Store the category truth (bkg, higgs, tau)
         df['true_category'] = info['type']
